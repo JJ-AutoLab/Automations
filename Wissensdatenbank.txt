@@ -1,0 +1,104 @@
+ElevenAgents | ElevenLabs
+Assistent anrufen
+
+Getrennt
+
+
+
+Demo Rezeptionist
+/
+
+Main
+Live 100 %
+ID: ...ejjhvg4m
+Zu Ihrer App hinzufügen
+
+
+
+
+
+Öffentlich
+Entwurf
+
+Variablen
+Vorschau
+Veröffentlichen
+
+
+
+Agent
+
+Arbeitsablauf
+
+Branches
+
+Wissensdatenbank
+
+Analyse
+
+Tools
+
+Tests
+
+Widget
+
+Sicherheit
+
+Erweitert
+Agent-Wissensdatenbank
+RAG konfigurieren
+Dokument hinzufügen
+Wissensdatenbank durchsuchen...
+Aktionen
+Demo GmbH – Ansprechpartner nach Objektgruppen
+
+
+662 B
+
+Justin Jürissen
+
+18. Feb. 2026, 15:43
+
+
+Wissensdatenbank
+
+Demo GmbH – Ansprechpartner nach Objektgruppen
+Dokument-ID
+
+Tx43QiRegj7tq46ov3fl
+
+
+Zuletzt aktualisiert
+
+18. Feb.
+
+Dokumentgröße
+
+662 B
+
+RAG-Indizes
+
+
+intfloat/e5-mistral-7b-instruct
+
+662 B
+
+Keine abhängigen Agenten
+
+File Inhalt
+
+Quelldatei
+Demo GmbH – Ansprechpartner nach Objektgruppen
+Objektgruppe Nord
+Gebiete: Bockenheim, Westend, Nordend Ansprechpartner: Sabine Keller Telefon: 069 - 123 456 11
+
+Objektgruppe Süd
+Gebiete: Sachsenhausen, Oberrad, Niederrad Ansprechpartner: Thomas Brandt Telefon: 069 - 123 456 12
+
+Objektgruppe Ost
+Gebiete: Ostend, Bornheim, Fechenheim Ansprechpartner: Nina Hoffmann Telefon: 069 - 123 456 13
+
+Objektgruppe West
+Gebiete: Höchst, Griesheim, Nied Ansprechpartner: Markus Weber Telefon: 069 - 123 456 14
+
+Schließen
