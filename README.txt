@@ -1,189 +1,103 @@
 ---
 
-# AI OUTBOUND LEAD AGENT – n8n WORKFLOW
+# Lead Qualification Automation (n8n)
 
-Dieser n8n Workflow automatisiert den kompletten Prozess für
-B2B Lead-Recherche und personalisierte Cold-Outreach-Kampagnen.
+Dieser Repository enthält einen **n8n Workflow zur automatisierten Lead-Qualifizierung** mit Conversational AI.
 
-Der Fokus liegt auf:
+Der Workflow kombiniert:
 
-* klarer Zielgruppendefinition
-* automatisierter Lead-Recherche
-* strukturierter Datenspeicherung
-* KI-gestützter Personalisierung
-* direkter Übergabe an Instantly
+* Chatbasierte Lead-Erfassung
+* Knowledge-Base-gestützte Antworten
+* Automatisches Lead Scoring
+* Speicherung strukturierter Lead-Daten
+* Vorbereitung für den Vertrieb
 
----
-
-## FUNKTIONEN
-
-1. FORMULAR & WEBHOOK
-
-* Formular zur Eingabe von:
-
-  * Kampagnenname
-  * Branche
-  * Stadt
-* Übergabe der Daten per Webhook an n8n
-
-2. GUARDRAILS & VALIDIERUNG
-
-* Blockiert:
-
-  * illegale / unethische Inhalte
-  * Unsinn oder Prompt Injection
-  * unrealistische oder generische Zielgruppen
-* Lässt nur sinnvolle B2B-Nischen zu
-
-3. LEAD-RECHERCHE (GOOGLE)
-
-* Google-Suche über Serper API
-* Automatische Filterung von:
-
-  * Branchenverzeichnissen
-  * Social Media
-  * Bewertungsportalen
-
-4. DATENEXTRAKTION
-
-* Crawlt Ziel-Websites inkl.:
-
-  * /impressum
-  * /kontakt
-* Extrahiert:
-
-  * Firmenname
-  * Ansprechpartner / Geschäftsführer
-  * E-Mail-Adresse
-  * Telefonnummer
-  * Adresse
-  * Website
-
-5. DATENAUFBEREITUNG
-
-* Normalisierung von Telefonnummern
-* Strukturierte Weitergabe der Daten
-
-6. GOOGLE SHEETS
-
-* Speicherung aller Leads in einer Tabelle
-* Saubere Spaltenstruktur für Weiterverarbeitung
-
-7. KI-GESTÜTZTE COLD-E-MAILS
-
-* Personalisierte E-Mail-Texte pro Lead
-* Berücksichtigt:
-
-  * Branche
-  * Stadt
-  * Firma
-  * Ansprechpartner
-* Kurz, natürlich, kein Massenmail-Stil
-
-8. INSTANTLY INTEGRATION
-
-* Automatische Kampagnenerstellung
-* Leads werden direkt zur Kampagne hinzugefügt
-* Übergabe von Custom Fields (Telefon, URL, Adresse, Text)
+Der Fokus liegt auf **Business-Qualifizierung**, nicht auf direktem Verkauf.
 
 ---
 
-## VORAUSSETZUNGEN
+## 🔍 Was der Workflow macht
 
-Benötigte Services:
+* Nimmt Chat-Nachrichten über Webhook entgegen
+* Beantwortet Fachfragen über eine Knowledge Base
+* Führt natürliche Qualifizierungs-Gespräche
+* Bewertet Leads automatisch (Cold / Warm / Hot)
+* Speichert alle Informationen in Google Sheets
+* Nutzt Vektorsuche (Supabase) für Kontext & Wissen
+
+---
+
+## 🧠 Kernkomponenten
+
+* **AI Agent** (Conversational Lead Qualification)
+* **Knowledge Base** (Vector Store)
+* **Webhook / Chat Interface**
+* **Lead Scoring Logic**
+* **Google Sheets Integration**
+* **Supabase Vector Store**
+* **OpenAI / Mistral Embeddings**
+
+---
+
+## 📁 Repository Inhalt
+
+* `Leads Qualifikation Automation.json` – n8n Workflow Export
+* `README` – Projektbeschreibung
+
+---
+
+## ⚙️ Voraussetzungen
 
 * n8n (Self-hosted oder Cloud)
-* OpenAI API
-* Serper API (Google Search)
-* Google Sheets
-* Instantly Account
-
-Benötigte n8n Nodes:
-
-* Webhook
-* HTTP Request
-* IF
-* Code
-* Google Sheets
-* LangChain Nodes
-* Instantly Node
+* OpenAI oder Mistral API
+* Supabase Projekt (Vector Store)
+* Google Sheets (für Lead-Speicherung)
 
 ---
 
-## SICHERHEIT & DATENSCHUTZ
+## 🔐 Sicherheit & Datenschutz
 
-Dieser Workflow ist sicher für das Hochladen auf GitHub:
+Dieser Workflow ist **bereinigt für öffentliche Repositories**:
 
 * Keine API Keys enthalten
-* Keine OAuth Tokens enthalten
-* Keine Credentials verknüpft
-* Keine echten Webhook-Secrets
-* Keine echten Lead-Daten (Pin Data entfernt)
+* Keine Tokens oder Secrets enthalten
+* Keine echten Webhook-URLs
+* Keine echten Lead-Daten
+* Credentials müssen nach Import neu gesetzt werden
 
 Beim Import fragt n8n automatisch nach eigenen Credentials.
 
 ---
 
-## INSTALLATION
+## 🚀 Installation
 
 1. n8n öffnen
-2. "Import Workflow" auswählen
-3. JSON-Datei importieren
-4. Eigene Credentials setzen:
-
-   * OpenAI
-   * Serper
-   * Google Sheets
-   * Instantly
-5. Webhooks aktivieren
-6. Workflow aktivieren
+2. Workflow importieren (`.json`)
+3. Eigene Credentials hinterlegen
+4. Webhooks aktivieren
+5. Workflow starten
 
 ---
 
-## OPTIONALE ANPASSUNGEN
+## ⚠️ Hinweise
 
-* Guardrail-Prompts anpassen
-* Weitere Datenfelder extrahieren
-* Andere Länder oder Sprachen ergänzen
-* CRM statt Google Sheets anbinden
-* Mehrstufige E-Mail-Sequenzen bauen
+* Dieser Workflow ist eine **technische Vorlage**
+* Verantwortung für DSGVO, Datenspeicherung und rechtliche Vorgaben liegt beim Nutzer
+* Keine Garantie für Lead-Qualität oder Conversion
 
 ---
 
-## USE CASES
-
-* Leadgenerierung für Agenturen
-* SaaS Outbound
-* Lokale Dienstleister
-* Vertriebsteams
-* Automatisierte Akquise-Systeme
-
----
-
-## RECHTLICHER HINWEIS
-
-Dieser Workflow ist eine technische Vorlage.
-
-Du bist selbst verantwortlich für:
-
-* DSGVO-Konformität
-* Cold-E-Mail-Gesetze
-* Opt-Out-Mechanismen
-* Einhaltung lokaler Vorschriften
-
----
-
-## LIZENZ
+## 📜 Lizenz
 
 Frei nutzbar für private und kommerzielle Zwecke.
-Weitergabe oder Verkauf nur mit entsprechender Kennzeichnung.
+Weitergabe oder Anpassung erlaubt.
 
 ---
 
-Wenn du willst, kann ich dir als Nächstes auch:
+Wenn du willst, kann ich dir:
 
-* eine extrem kurze README (für Marketplace)
-* eine Version für Kunden
-* oder eine technische Architektur-Erklärung
+* eine **extrem kurze README (5–6 Zeilen)**
+* eine **Version für Kunden**
+* oder eine **README mit Architektur-Grafik**
 
 machen.

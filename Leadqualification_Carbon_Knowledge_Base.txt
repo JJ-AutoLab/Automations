@@ -1,0 +1,132 @@
+---
+
+KNOWLEDGE BASE
+LEAD QUALIFICATION AUTOMATION – CARBON SALES
+============================================
+
+## ZIEL DER KNOWLEDGE BASE
+
+Diese Knowledge Base dient als Grundlage für einen Conversational-AI-Workflow zur automatisierten Lead-Qualifizierung im Bereich Carbon- und CO₂-Lösungen.
+Der Fokus liegt darauf, Interessenten zu qualifizieren, Verkaufschancen zu bewerten und relevante Leads effizient an den Vertrieb zu übergeben.
+
+---
+
+## BUSINESS-KONTEXT
+
+Unternehmen stehen zunehmend unter regulatorischem, wirtschaftlichem und gesellschaftlichem Druck, ihre CO₂-Emissionen zu erfassen, zu reduzieren oder zu kompensieren.
+Carbon-Produkte wie CO₂-Kompensation, Carbon Credits oder Emissions-Reporting-Lösungen sind erklärungsbedürftig und benötigen strukturierte Beratung.
+
+Diese Automatisierung unterstützt den Vertrieb, indem sie frühe Gespräche übernimmt und nur qualifizierte Leads weiterleitet.
+
+---
+
+## ZIELGRUPPEN
+
+* Kleine und mittlere Unternehmen (KMU)
+* Industrie- und Produktionsunternehmen
+* E-Commerce-Unternehmen
+* Dienstleister mit ESG- oder Nachhaltigkeitsanforderungen
+* Agenturen oder Plattformen mit Fokus auf Nachhaltigkeit
+
+---
+
+## ZIEL DER LEAD-QUALIFIZIERUNG
+
+* Identifikation echter Kaufabsicht
+* Einschätzung von Unternehmensgröße und Emissionsvolumen
+* Bewertung von Budget, Timing und Entscheidungsreife
+* Entlastung des Vertriebs durch Vorqualifizierung
+* Übergabe strukturierter Leads an Sales
+
+---
+
+## QUALIFIZIERUNGSLOGIK (CONVERSATIONAL AI)
+
+Der AI-Agent führt ein natürliches, dialogbasiertes Gespräch und sammelt strukturierte Informationen.
+
+Abzufragende Kerninformationen:
+
+* Branche und Art des Unternehmens
+* Unternehmensgröße (Mitarbeiter, Standorte)
+* Aktueller Stand bei CO₂-Messung oder ESG-Reporting
+* Motivation (Compliance, Marketing, interne Nachhaltigkeitsziele)
+* Zeitrahmen für Umsetzung
+* Budgetrahmen oder Investitionsbereitschaft
+* Entscheidungsstruktur (Ansprechpartner, Entscheider)
+
+---
+
+## LEAD SCORING MODELL
+
+Jeder Lead wird automatisch bewertet und klassifiziert.
+
+COLD LEAD:
+
+* Reine Informationsphase
+* Kein klarer Zeitrahmen
+* Kein Budget definiert
+
+WARM LEAD:
+
+* Konkretes Interesse vorhanden
+* Mittelfristige Planung
+* Interne Diskussion läuft
+
+HOT LEAD:
+
+* Akuter Bedarf
+* Budget vorhanden oder freigegeben
+* Entscheidung zeitnah geplant
+
+---
+
+## TYPISCHE EINWÄNDE & EMPFOHLENE ANTWORTEN
+
+Einwand: „Zu teuer“
+Antwort: Fokus auf langfristigen ROI, regulatorische Risiken, Image- und Wettbewerbsvorteile.
+
+Einwand: „Kein aktueller Bedarf“
+Antwort: Aufklärung über kommende ESG-Pflichten und steigende Anforderungen.
+
+Einwand: „Unklarer Nutzen“
+Antwort: Konkrete Beispiele, Benchmarks und Best Practices aus der Branche.
+
+---
+
+## ÜBERGABE AN VERTRIEB
+
+Qualifizierte Leads werden mit folgenden Informationen an Sales übergeben:
+
+* Zusammenfassung des Gesprächs
+* Lead Score (Cold / Warm / Hot)
+* Entscheidungsstatus
+* Empfohlene Gesprächsstrategie
+* Relevante Einwände und Interessen
+
+---
+
+## COMPLIANCE & ETHIK
+
+* Keine Greenwashing-Versprechen
+* Transparente Kommunikation zu Carbon-Produkten
+* Klare Abgrenzung zwischen Kompensation und Reduktion
+* DSGVO-konforme Speicherung und Verarbeitung von Daten
+
+---
+
+## EMPFOHLENE WEITERENTWICKLUNGEN
+
+* Integration in CRM-Systeme
+* Erweiterung um Branchen-spezifische Dialoge
+* Automatisierte Follow-up-Sequenzen
+* KPI-basierte Optimierung des Lead Scorings
+
+---
+
+## ENDE DER KNOWLEDGE BASE
+
+Wenn du willst, formatiere ich das:
+
+* 🔹 **direkt als System Prompt**
+* 🔹 **als FAQ-Dialog für den Bot**
+* 🔹 **oder als Vector-Store-ready Version (Chunks + Titel)**

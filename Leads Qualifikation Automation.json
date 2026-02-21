@@ -1,0 +1,783 @@
+{
+  "name": "Leads Qualifikation Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Mistral Key:\MISTRAL_API_KEY_HERE"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -624,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "id",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "binaryProperty": "New_File",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mistralAi",
+      "typeVersion": 1,
+      "position": [
+        224,
+        96
+      ],
+      "id": "ID",
+      "name": "Extract text",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "id",
+          "name": "Mistral Cloud account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Supabase Project Url:\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -624,
+        144
+      ],
+      "typeVersion": 1,
+      "id": "id",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": ""
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -624,
+        -240
+      ],
+      "typeVersion": 1,
+      "id": "id",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "Supabase Servicerole Key: "
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -624,
+        320
+      ],
+      "typeVersion": 1,
+      "id": "id",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        96
+      ],
+      "id": "id",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "id",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Upload Knowledge Base",
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "New_File",
+              "fieldLabel": "File",
+              "fieldType": "file",
+              "acceptFileTypes": ".txt",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.4,
+      "position": [
+        16,
+        96
+      ],
+      "id": "id",
+      "name": "On form submission",
+      "webhookId": "id"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        432,
+        416
+      ],
+      "id": "7id",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "id",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.pages.map(p => p.markdown).join('\\n\\n') }}",
+        "textSplittingMode": "custom",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        576,
+        288
+      ],
+      "id": "id",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "chunkSize": 2000,
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        624,
+        416
+      ],
+      "id": "id",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "content": "Knowledgebase",
+        "height": 656,
+        "width": 1120
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "id",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "Chatbot",
+        "height": 640,
+        "width": 1120
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        624
+      ],
+      "typeVersion": 1,
+      "id": "id",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        32,
+        752
+      ],
+      "id": "",
+      "name": "When chat message received",
+      "webhookId": ""
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "IDENTITÄT & KONTEXT\n\nDu bist der KI-Assistent von Everlast Consulting auf der Thank-You-Page nach einem Report-Download zum Thema Carbon, CO₂-Reduktion & Nachhaltigkeitslösungen.\n\nDeine Aufgabe:\nLeads durch natürliche Gespräche qualifizieren, Bedarf rund um Carbon-Lösungen erkennen und wertvolle Business-Informationen sammeln.\n\nVERFÜGBARE TOOLS\n\nknowledge_base\n\nEnthält Informationen aus dem heruntergeladenen Report zu Carbon, CO₂-Bilanzierung, ESG & Emissionsreduktion\n\nPFLICHT: Bei jeder inhaltlichen Frage zum Report MUSST du dieses Tool nutzen\n\nSuche mit relevanten Keywords aus der User-Frage\n\nErfinde NIEMALS Zahlen, CO₂-Werte oder regulatorische Aussagen\n\nsave_lead\n\nSpeichert Lead-Daten in Google Sheets\n\nWird KONTINUIERLICH aufgerufen, sobald neue Infos vorliegen\n\nMatching über session_id\n\nSende IMMER ALLE bisher gesammelten Daten mit, auch wenn nur ein Feld neu ist\n\nGESPRÄCHSMODI\nModus 1: Q&A zum Carbon-Report\n\nWenn der User Fragen zum Report stellt:\n\nRufe knowledge_base mit passenden Keywords auf\n\nAntworte präzise und faktenbasiert\n\nFalls nichts gefunden wird:\n„Dazu habe ich im Report leider keine konkreten Informationen gefunden.“\n\nNutze die Antwort als natürliche Brücke zur Qualifizierung\n\nBeispiel:\nUser: „Was bringt CO₂-Kompensation wirklich?“\n→ knowledge_base nutzen\n→ „Im Report wird gezeigt, wie Unternehmen Kompensation einsetzen, um kurzfristig Emissionen auszugleichen, während Reduktionsmaßnahmen aufgebaut werden. Darf ich fragen, ob ihr euch eher aus Compliance- oder aus strategischen Gründen mit dem Thema beschäftigt?“\n\nModus 2: Business-Fit-Check (Lead-Qualifizierung)\n\nSammle conversational (niemals wie ein Formular!) folgende Informationen:\n\nMUST-HAVE (für Qualifizierung):\n\nName\n\nUnternehmen\n\nE-Mail\n\nUse Case (z. B. ESG-Reporting, Kompensation, Reduktion, Kundenkommunikation)\n\nNICE-TO-HAVE (für Lead-Score):\n\nRolle / Position\n\nTelefon\n\nTeamgröße\n\nUnternehmensgröße oder Emissionsrelevanz\n\nAktueller Stand bei CO₂-Messung / ESG\n\nTech Stack (z. B. ESG-Tools, ERP, Reporting-Software)\n\nTimeline (wann soll gestartet werden?)\n\nPain Points (z. B. Unsicherheit, Zeitmangel, regulatorischer Druck)\n\nLEAD-SCORING SYSTEM\n\nBei JEDEM save_lead-Call MUSS ein aktueller Score (0–100) berechnet und mitgegeben werden.\n\nHOT Lead (80–100 Punkte):\n\nEntscheidungsbefugnis (Geschäftsführung, Sustainability Lead, Head of Operations)\n\nKonkreter Carbon-Use-Case\n\nKlare Pain Points (z. B. ESG-Pflichten, Kundendruck)\n\nBudget oder Investitionsbereitschaft erkennbar\n\nTimeline ≤ 3 Monate\n\nWARM Lead (50–79 Punkte):\n\nEinfluss auf Entscheidung\n\nInteresse vorhanden, aber noch unkonkret\n\nErste interne Diskussionen\n\nTimeline offen oder > 3 Monate\n\nCOLD Lead (0–49 Punkte):\n\nKein Entscheidungseinfluss\n\nReine Informationsphase\n\nKein klarer Business-Bezug\n\nKeine Timeline\n\nGESPRÄCHSFÜHRUNG\n\nTonalität:\n\nProfessionell, beratend, vertrauenswürdig\n\nKurze Antworten (max. 3–4 Sätze)\n\nKeine Bullet-Listen im Chat\n\nKein Belehren, kein Greenwashing\n\nStrategie:\n\nInteresse am Unternehmen zeigen\n\nImmer nur EINE Frage gleichzeitig\n\nAntworten aktiv aufgreifen\n\nGespräch logisch vertiefen\n\nNie wie ein Fragebogen wirken\n\nBeispiel GUT:\nUser: „Das Thema Nachhaltigkeit wird gerade wichtiger.“\nBot: „Absolut, das hören wir aktuell von vielen Unternehmen. Geht es bei euch eher um regulatorische Anforderungen oder um strategische Positionierung nach außen?“\n\nDATENSAMMLUNG\n\nKRITISCH: Speichere SOFORT und HÄUFIG!\n\nsave_lead IMMER aufrufen, wenn:\n\nName genannt wird\n\nUnternehmen genannt wird\n\nNeue Business-Informationen kommen\n\nPain Points genannt werden\n\nTimeline erwähnt wird\n\nTech Stack erwähnt wird\n\nNach jeder substanziellen Antwort\n\nRegel: Lieber einmal zu viel speichern als einmal zu wenig.\n\nBei JEDEM save_lead:\n\nAlle bisherigen Daten mitsenden\n\nlead_score neu berechnen\n\nsummary aktualisieren (kurzer Gesprächsstand)\n\nMatching über session_id\n\nEDGE CASES\n\n„Ich will mit einem Menschen sprechen“\n„Sehr gerne! Damit mein Kollege sich vorbereiten kann: Worum geht es bei euch konkret im Bereich CO₂ oder Nachhaltigkeit?“\n\nPreisanfrage\n„Das hängt stark vom Emissionsumfang und eurem Ziel ab. Darf ich kurz fragen, ob es bei euch eher um Reporting, Reduktion oder Kompensation geht?“\n\nGreenwashing-Sorge\n„Gute Frage – genau deshalb ist Transparenz so wichtig. Wie geht ihr aktuell mit dem Thema intern um?“\n\nOffensichtlich unqualifiziert\nBleibe freundlich, vergebe Cold-Score, biete Ressourcen an.\n\nWICHTIGE REGELN\n\n❌ NIEMALS:\n\nPreise nennen\n\nGreenwashing-Versprechen machen\n\nRegulatorische Aussagen erfinden\n\nMehrere Fragen gleichzeitig stellen\n\nOhne knowledge_base über Report-Inhalte sprechen\n\nChat abrupt beenden\n\n✅ IMMER:\n\nsave_lead bei neuen Infos\n\nEhrliches Lead-Scoring\n\nWert durch Einordnung & Kontext\n\nProfessionell, menschlich, beratend bleiben\n\nERÖFFNUNG\n\n„Hi! Schön, dass du dir den Carbon-Report heruntergeladen hast 😊\nHast du schon einen Blick reingeworfen – oder gibt es ein Thema rund um CO₂, das euch aktuell besonders beschäftigt?“\n\nZiel:\nLeads natürlich qualifizieren, echten Mehrwert liefern und Carbon-Interessenten strukturiert für den Vertrieb vorbereiten – ohne Druck, ohne Verhör."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        240,
+        752
+      ],
+      "id": "1d840575-4a2c-4d14-a065-0cb7a15c985e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        112,
+        960
+      ],
+      "id": "",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        960
+      ],
+      "id": "a",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Durchsucht die Knowledge Base mit allen Reports, Analysen und Dokumenten.\nVerwende Keywords aus der User-Frage für die Suche.\nNutze dies für jede Fach- oder Datenfrage.",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        880
+      ],
+      "id": "",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        1088
+      ],
+      "id": "",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HotQs_12hx5yTv_f5yLhq1hLuMMRnkqq9xJFl_Na81E/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "session_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('session_id__using_to_match_', ``, 'string') }}",
+            "date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('date', ``, 'string') }}",
+            "lead_score": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('lead_score', ``, 'string') }}",
+            "name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('name', ``, 'string') }}",
+            "telefon": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('telefon', ``, 'string') }}",
+            "email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('email', ``, 'string') }}",
+            "company": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('company', ``, 'string') }}",
+            "role": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('role', ``, 'string') }}",
+            "team_size": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('team_size', ``, 'string') }}",
+            "call_volume": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('call_volume', ``, 'string') }}",
+            "use_case": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('use_case', ``, 'string') }}",
+            "tech_stack": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('tech_stack', ``, 'string') }}",
+            "timeline": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('timeline', ``, 'string') }}",
+            "pain_points": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('pain_points', ``, 'string') }}",
+            "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('summary', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "session_id"
+          ],
+          "schema": [
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lead_score",
+              "displayName": "lead_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "telefon",
+              "displayName": "telefon",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "role",
+              "displayName": "role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "team_size",
+              "displayName": "team_size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "call_volume",
+              "displayName": "call_volume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "use_case",
+              "displayName": "use_case",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "tech_stack",
+              "displayName": "tech_stack",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timeline",
+              "displayName": "timeline",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "pain_points",
+              "displayName": "pain_points",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        512,
+        976
+      ],
+      "id": "2a026b81-8335-4638-bf7d-626b61ee3fe7",
+      "name": "Save Lead",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Webseite",
+        "height": 320,
+        "width": 1120
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -96,
+        1312
+      ],
+      "typeVersion": 1,
+      "id": "3ca7531e-9f64-4ba8-84d2-90157cbbf84f",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "path": "cahtbot-seite",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        48,
+        1424
+      ],
+      "id": "eb0e52f7-476d-4ad8-bf1f-4dbb465d4df3",
+      "name": "Webhook",
+      "webhookId": "06907efe-0cbb-49c1-918d-72d38c4df48a"
+    },
+    {
+      "parameters": {
+        "jsCode": "<!doctype html>\n<html lang=\"de\">\n<head>\n  <meta charset=\"utf-8\" />\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\" />\n  <title>Chatbot</title>\n  <style>\n    body { font-family: system-ui, Arial; margin: 0; background:#0b0b0b; color:#fff; }\n    .wrap { max-width: 720px; margin: 40px auto; padding: 0 16px; }\n    .card { border:1px solid rgba(255,255,255,.12); border-radius:16px; overflow:hidden; background:rgba(255,255,255,.04); }\n    .head { padding:14px 16px; font-weight:700; border-bottom:1px solid rgba(255,255,255,.12); }\n    .msgs { height: 420px; overflow:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }\n    .msg { max-width: 85%; padding:10px 12px; border-radius:12px; line-height:1.35; white-space:pre-wrap; }\n    .me { align-self:flex-end; background:#fce883; color:#000; }\n    .bot { align-self:flex-start; background:rgba(255,255,255,.10); }\n    .bar { display:flex; gap:10px; padding:12px; border-top:1px solid rgba(255,255,255,.12); }\n    input { flex:1; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06); color:#fff; }\n    button { padding:12px 14px; border-radius:12px; border:0; cursor:pointer; font-weight:700; background:#fce883; }\n    button:disabled { opacity:.7; cursor:not-allowed; }\n    .small { opacity:.7; font-size:12px; margin-top:10px; }\n  </style>\n</head>\n<body>\n  <div class=\"wrap\">\n    <div class=\"card\">\n      <div class=\"head\">Chatbot</div>\n      <div class=\"msgs\" id=\"msgs\"></div>\n      <form class=\"bar\" id=\"form\">\n        <input id=\"input\" placeholder=\"Schreib deine Nachricht…\" autocomplete=\"off\" />\n        <button id=\"send\" type=\"submit\">Senden</button>\n      </form>\n    </div>\n    <div class=\"small\">Session wird lokal gespeichert (localStorage).</div>\n  </div>\n\n  <script>\n    // ✅ HIER deine n8n Chat/Webhook URL eintragen\n    const CHAT_ENDPOINT = \"10/chat\"; \n\n    // Session-ID lokal halten (damit \"matching über session_id\" funktioniert)\n    const SESSION_KEY = \"chat_session_id\";\n    const session_id = localStorage.getItem(SESSION_KEY) || crypto.randomUUID();\n    localStorage.setItem(SESSION_KEY, session_id);\n\n    const msgs = document.getElementById(\"msgs\");\n    const form = document.getElementById(\"form\");\n    const input = document.getElementById(\"input\");\n    const sendBtn = document.getElementById(\"send\");\n\n    function addMsg(text, who) {\n      const div = document.createElement(\"div\");\n      div.className = `msg ${who}`;\n      div.textContent = text;\n      msgs.appendChild(div);\n      msgs.scrollTop = msgs.scrollHeight;\n    }\n\n    // Optional: Begrüßung\n    addMsg(\"Hi! Wie kann ich dir helfen?\", \"bot\");\n\n    async function sendMessage(message) {\n      sendBtn.disabled = true;\n      try {\n        const res = await fetch(CHAT_ENDPOINT, {\n          method: \"POST\",\n          headers: { \"Content-Type\": \"application/json\" },\n          body: JSON.stringify({ session_id, message })\n        });\n\n        // Wenn dein Webhook text/plain zurückgibt:\n        const contentType = res.headers.get(\"content-type\") || \"\";\n        let data;\n        if (contentType.includes(\"application/json\")) {\n          data = await res.json();\n        } else {\n          const txt = await res.text();\n          data = { reply: txt };\n        }\n\n        // ✅ Passe diesen Key an dein n8n Response-Format an:\n        const reply = data.reply ?? data.text ?? data.message ?? \"Keine Antwort erhalten.\";\n        addMsg(reply, \"bot\");\n      } catch (e) {\n        addMsg(\"Fehler: Konnte den Bot nicht erreichen.\", \"bot\");\n        console.error(e);\n      } finally {\n        sendBtn.disabled = false;\n      }\n    }\n\n    form.addEventListener(\"submit\", async (e) => {\n      e.preventDefault();\n      const message = input.value.trim();\n      if (!message) return;\n      input.value = \"\";\n      addMsg(message, \"me\");\n      await sendMessage(message);\n    });\n  </script>\n</body>\n</html>"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        1424
+      ],
+      "id": "8bffde41-4f76-4f8c-942f-4e849a117d3b",
+      "name": "Code in JavaScript Chatbot"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.htmlContent }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        464,
+        1424
+      ],
+      "id": "2d00b917-6b18-43b1-93a7-bfc5bdd53b86",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {
+    "Extract text": [
+      {
+        "json": {
+          "pages": [
+            {
+              "index": 0,
+              "markdown": "---\r\n\r\nKNOWLEDGE BASE\r\nLEAD QUALIFICATION AUTOMATION – CARBON SALES\r\n============================================\r\n\r\n## ZIEL DER KNOWLEDGE BASE\r\n\r\nDiese Knowledge Base dient als Grundlage für einen Conversational-AI-Workflow zur automatisierten Lead-Qualifizierung im Bereich Carbon- und CO₂-Lösungen.\r\nDer Fokus liegt darauf, Interessenten zu qualifizieren, Verkaufschancen zu bewerten und relevante Leads effizient an den Vertrieb zu übergeben.\r\n\r\n---\r\n\r\n## BUSINESS-KONTEXT\r\n\r\nUnternehmen stehen zunehmend unter regulatorischem, wirtschaftlichem und gesellschaftlichem Druck, ihre CO₂-Emissionen zu erfassen, zu reduzieren oder zu kompensieren.\r\nCarbon-Produkte wie CO₂-Kompensation, Carbon Credits oder Emissions-Reporting-Lösungen sind erklärungsbedürftig und benötigen strukturierte Beratung.\r\n\r\nDiese Automatisierung unterstützt den Vertrieb, indem sie frühe Gespräche übernimmt und nur qualifizierte Leads weiterleitet.\r\n\r\n---\r\n\r\n## ZIELGRUPPEN\r\n\r\n* Kleine und mittlere Unternehmen (KMU)\r\n* Industrie- und Produktionsunternehmen\r\n* E-Commerce-Unternehmen\r\n* Dienstleister mit ESG- oder Nachhaltigkeitsanforderungen\r\n* Agenturen oder Plattformen mit Fokus auf Nachhaltigkeit\r\n\r\n---\r\n\r\n## ZIEL DER LEAD-QUALIFIZIERUNG\r\n\r\n* Identifikation echter Kaufabsicht\r\n* Einschätzung von Unternehmensgröße und Emissionsvolumen\r\n* Bewertung von Budget, Timing und Entscheidungsreife\r\n* Entlastung des Vertriebs durch Vorqualifizierung\r\n* Übergabe strukturierter Leads an Sales\r\n\r\n---\r\n\r\n## QUALIFIZIERUNGSLOGIK (CONVERSATIONAL AI)\r\n\r\nDer AI-Agent führt ein natürliches, dialogbasiertes Gespräch und sammelt strukturierte Informationen.\r\n\r\nAbzufragende Kerninformationen:\r\n\r\n* Branche und Art des Unternehmens\r\n* Unternehmensgröße (Mitarbeiter, Standorte)\r\n* Aktueller Stand bei CO₂-Messung oder ESG-Reporting\r\n* Motivation (Compliance, Marketing, interne Nachhaltigkeitsziele)\r\n* Zeitrahmen für Umsetzung\r\n* Budgetrahmen oder Investitionsbereitschaft\r\n* Entscheidungsstruktur (Ansprechpartner, Entscheider)\r\n\r\n---\r\n\r\n## LEAD SCORING MODELL\r\n\r\nJeder Lead wird automatisch bewertet und klassifiziert.\r\n\r\nCOLD LEAD:\r\n\r\n* Reine Informationsphase\r\n* Kein klarer Zeitrahmen\r\n* Kein Budget definiert\r\n\r\nWARM LEAD:\r\n\r\n* Konkretes Interesse vorhanden\r\n* Mittelfristige Planung\r\n* Interne Diskussion läuft\r\n\r\nHOT LEAD:\r\n\r\n* Akuter Bedarf\r\n* Budget vorhanden oder freigegeben\r\n* Entscheidung zeitnah geplant\r\n\r\n---\r\n\r\n## TYPISCHE EINWÄNDE & EMPFOHLENE ANTWORTEN\r\n\r\nEinwand: „Zu teuer“\r\nAntwort: Fokus auf langfristigen ROI, regulatorische Risiken, Image- und Wettbewerbsvorteile.\r\n\r\nEinwand: „Kein aktueller Bedarf“\r\nAntwort: Aufklärung über kommende ESG-Pflichten und steigende Anforderungen.\r\n\r\nEinwand: „Unklarer Nutzen“\r\nAntwort: Konkrete Beispiele, Benchmarks und Best Practices aus der Branche.\r\n\r\n---\r\n\r\n## ÜBERGABE AN VERTRIEB\r\n\r\nQualifizierte Leads werden mit folgenden Informationen an Sales übergeben:\r\n\r\n* Zusammenfassung des Gesprächs\r\n* Lead Score (Cold / Warm / Hot)\r\n* Entscheidungsstatus\r\n* Empfohlene Gesprächsstrategie\r\n* Relevante Einwände und Interessen\r\n\r\n---\r\n\r\n## COMPLIANCE & ETHIK\r\n\r\n* Keine Greenwashing-Versprechen\r\n* Transparente Kommunikation zu Carbon-Produkten\r\n* Klare Abgrenzung zwischen Kompensation und Reduktion\r\n* DSGVO-konforme Speicherung und Verarbeitung von Daten\r\n\r\n---\r\n\r\n## EMPFOHLENE WEITERENTWICKLUNGEN\r\n\r\n* Integration in CRM-Systeme\r\n* Erweiterung um Branchen-spezifische Dialoge\r\n* Automatisierte Follow-up-Sequenzen\r\n* KPI-basierte Optimierung des Lead Scorings\r\n\r\n---\r\n\r\n## ENDE DER KNOWLEDGE BASE\r\n\r\nWenn du willst, formatiere ich das:\r\n\r\n* 🔹 **direkt als System Prompt**\r\n* 🔹 **als FAQ-Dialog für den Bot**\r\n* 🔹 **oder als Vector-Store-ready Version (Chunks + Titel)**\r\n",
+              "images": [],
+              "tables": [],
+              "hyperlinks": [],
+              "header": null,
+              "footer": null,
+              "dimensions": null
+            }
+          ],
+          "model": "mistral-ocr-latest",
+          "document_annotation": null,
+          "usage_info": {
+            "pages_processed": 1,
+            "doc_size_bytes": 3769
+          },
+          "extractedText": "---\r\n\r\nKNOWLEDGE BASE\r\nLEAD QUALIFICATION AUTOMATION – CARBON SALES\r\n============================================\r\n\r\n## ZIEL DER KNOWLEDGE BASE\r\n\r\nDiese Knowledge Base dient als Grundlage für einen Conversational-AI-Workflow zur automatisierten Lead-Qualifizierung im Bereich Carbon- und CO₂-Lösungen.\r\nDer Fokus liegt darauf, Interessenten zu qualifizieren, Verkaufschancen zu bewerten und relevante Leads effizient an den Vertrieb zu übergeben.\r\n\r\n---\r\n\r\n## BUSINESS-KONTEXT\r\n\r\nUnternehmen stehen zunehmend unter regulatorischem, wirtschaftlichem und gesellschaftlichem Druck, ihre CO₂-Emissionen zu erfassen, zu reduzieren oder zu kompensieren.\r\nCarbon-Produkte wie CO₂-Kompensation, Carbon Credits oder Emissions-Reporting-Lösungen sind erklärungsbedürftig und benötigen strukturierte Beratung.\r\n\r\nDiese Automatisierung unterstützt den Vertrieb, indem sie frühe Gespräche übernimmt und nur qualifizierte Leads weiterleitet.\r\n\r\n---\r\n\r\n## ZIELGRUPPEN\r\n\r\n* Kleine und mittlere Unternehmen (KMU)\r\n* Industrie- und Produktionsunternehmen\r\n* E-Commerce-Unternehmen\r\n* Dienstleister mit ESG- oder Nachhaltigkeitsanforderungen\r\n* Agenturen oder Plattformen mit Fokus auf Nachhaltigkeit\r\n\r\n---\r\n\r\n## ZIEL DER LEAD-QUALIFIZIERUNG\r\n\r\n* Identifikation echter Kaufabsicht\r\n* Einschätzung von Unternehmensgröße und Emissionsvolumen\r\n* Bewertung von Budget, Timing und Entscheidungsreife\r\n* Entlastung des Vertriebs durch Vorqualifizierung\r\n* Übergabe strukturierter Leads an Sales\r\n\r\n---\r\n\r\n## QUALIFIZIERUNGSLOGIK (CONVERSATIONAL AI)\r\n\r\nDer AI-Agent führt ein natürliches, dialogbasiertes Gespräch und sammelt strukturierte Informationen.\r\n\r\nAbzufragende Kerninformationen:\r\n\r\n* Branche und Art des Unternehmens\r\n* Unternehmensgröße (Mitarbeiter, Standorte)\r\n* Aktueller Stand bei CO₂-Messung oder ESG-Reporting\r\n* Motivation (Compliance, Marketing, interne Nachhaltigkeitsziele)\r\n* Zeitrahmen für Umsetzung\r\n* Budgetrahmen oder Investitionsbereitschaft\r\n* Entscheidungsstruktur (Ansprechpartner, Entscheider)\r\n\r\n---\r\n\r\n## LEAD SCORING MODELL\r\n\r\nJeder Lead wird automatisch bewertet und klassifiziert.\r\n\r\nCOLD LEAD:\r\n\r\n* Reine Informationsphase\r\n* Kein klarer Zeitrahmen\r\n* Kein Budget definiert\r\n\r\nWARM LEAD:\r\n\r\n* Konkretes Interesse vorhanden\r\n* Mittelfristige Planung\r\n* Interne Diskussion läuft\r\n\r\nHOT LEAD:\r\n\r\n* Akuter Bedarf\r\n* Budget vorhanden oder freigegeben\r\n* Entscheidung zeitnah geplant\r\n\r\n---\r\n\r\n## TYPISCHE EINWÄNDE & EMPFOHLENE ANTWORTEN\r\n\r\nEinwand: „Zu teuer“\r\nAntwort: Fokus auf langfristigen ROI, regulatorische Risiken, Image- und Wettbewerbsvorteile.\r\n\r\nEinwand: „Kein aktueller Bedarf“\r\nAntwort: Aufklärung über kommende ESG-Pflichten und steigende Anforderungen.\r\n\r\nEinwand: „Unklarer Nutzen“\r\nAntwort: Konkrete Beispiele, Benchmarks und Best Practices aus der Branche.\r\n\r\n---\r\n\r\n## ÜBERGABE AN VERTRIEB\r\n\r\nQualifizierte Leads werden mit folgenden Informationen an Sales übergeben:\r\n\r\n* Zusammenfassung des Gesprächs\r\n* Lead Score (Cold / Warm / Hot)\r\n* Entscheidungsstatus\r\n* Empfohlene Gesprächsstrategie\r\n* Relevante Einwände und Interessen\r\n\r\n---\r\n\r\n## COMPLIANCE & ETHIK\r\n\r\n* Keine Greenwashing-Versprechen\r\n* Transparente Kommunikation zu Carbon-Produkten\r\n* Klare Abgrenzung zwischen Kompensation und Reduktion\r\n* DSGVO-konforme Speicherung und Verarbeitung von Daten\r\n\r\n---\r\n\r\n## EMPFOHLENE WEITERENTWICKLUNGEN\r\n\r\n* Integration in CRM-Systeme\r\n* Erweiterung um Branchen-spezifische Dialoge\r\n* Automatisierte Follow-up-Sequenzen\r\n* KPI-basierte Optimierung des Lead Scorings\r\n\r\n---\r\n\r\n## ENDE DER KNOWLEDGE BASE\r\n\r\nWenn du willst, formatiere ich das:\r\n\r\n* 🔹 **direkt als System Prompt**\r\n* 🔹 **als FAQ-Dialog für den Bot**\r\n* 🔹 **oder als Vector-Store-ready Version (Chunks + Titel)**\r\n",
+          "pageCount": 1
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Extract text": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Extract text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Lead": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript Chatbot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript Chatbot": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "0fb827dd-d026-4bec-9c76-c9a1047e4d3a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "32cd46498dbd61b2a7bbed539687bda2e0422a66f98d716ede765f1b92c7b405"
+  },
+  "id": "IZldn7iXwTRjlJ0SyJF_5",
+  "tags": []
+}
