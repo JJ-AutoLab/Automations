@@ -1,0 +1,478 @@
+{
+  "name": "Automatisierte Angebotserstellung",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "solar-angebot",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6ac01745-eba4-48bc-8df8-225c5b6e63b0",
+      "name": "Webhook",
+      "webhookId": "PLACEHOLDER"
+    },
+    {
+      "parameters": {
+        "jsCode": "const products = {};\n\nfor (const item of $input.all()) {\n  const data = item.json;\n  if (data.product_code) {\n    products[data.product_code] = data;\n  }\n}\n\nreturn {\n  json: {\n    productJson: JSON.stringify(products)\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "537ba60e-ccbd-4f61-ae35-8f61284dab95",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.myHTML }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type ",
+                "value": "Text/html"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        832,
+        0
+      ],
+      "id": "fb688025-9149-4a81-bdfd-efee3e69ef71",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "content": "Generierung des Angbotes und er Webseite",
+        "height": 464,
+        "width": 1232
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "09643182-d25a-40ab-98a0-d0cc8150993c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "EMail-versand",
+        "height": 544,
+        "width": 2112
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "02323368-0633-43f8-8270-6ea3bd49c36a",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "solar-angebot-abschluss",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        416
+      ],
+      "id": "330cd91d-a184-4688-969b-5eff4bfabd59",
+      "name": "Webhook1",
+      "webhookId": "PLACEHOLDER"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"name\": \"Automatisierte Angebotserstellung\",\n  \"nodes\": [\n    {\n      \"parameters\": {\n        \"path\": \"solar-angebot\",\n        \"responseMode\": \"responseNode\",\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.webhook\",\n      \"typeVersion\": 2.1,\n      \"position\": [\n        0,\n        0\n      ],\n      \"id\": \"6693d6ba-359d-4c41-9409-c1232eb4984c\",\n      \"name\": \"Webhook\",\n      \"webhookId\": \"00000000-0000-0000-0000-000000000000\"\n    },\n    {\n      \"parameters\": {\n        \"operation\": \"get\",\n        \"dataTableId\": {\n          \"__rl\": true,\n          \"value\": \"YOUR_DATA_TABLE_ID\",\n          \"mode\": \"list\",\n          \"cachedResultName\": \"products_solar\",\n          \"cachedResultUrl\": \"/projects/YOUR_PROJECT_ID/datatables/YOUR_DATA_TABLE_ID\"\n        },\n        \"returnAll\": true\n      },\n      \"type\": \"n8n-nodes-base.dataTable\",\n      \"typeVersion\": 1,\n      \"position\": [\n        208,\n        0\n      ],\n      \"id\": \"ab2c2b19-0776-492b-a4e3-c161593a5165\",\n      \"name\": \"Get row(s)\"\n    },\n    {\n      \"parameters\": {\n        \"jsCode\": \"const products = {};\\n\\nfor (const item of $input.all()) {\\n  const data = item.json;\\n  if (data.product_code) {\\n    products[data.product_code] = data;\\n  }\\n}\\n\\nreturn {\\n  json: {\\n    productJson: JSON.stringify(products)\\n  }\\n};\"\n      },\n      \"type\": \"n8n-nodes-base.code\",\n      \"typeVersion\": 2,\n      \"position\": [\n        416,\n        0\n      ],\n      \"id\": \"0c73191a-cbc3-46d0-8e49-e086c1e021b6\",\n      \"name\": \"Code in JavaScript\"\n    },\n    {\n      \"parameters\": {\n        \"assignments\": {\n          \"assignments\": [\n            {\n              \"id\": \"0ff6cf2e-ce4a-4513-9f93-4ac7edce06dd\",\n              \"name\": \"myHTML\",\n              \"value\": \"=<!DOCTYPE html>\\n<html lang=\\\"de\\\">\\n<head>\\n    <meta charset=\\\"UTF-8\\\">\\n    <meta name=\\\"viewport\\\" content=\\\"width=device-width, initial-scale=1.0\\\">\\n    <title>Demo Solar - Konfigurator</title>\\n    <script src=\\\"https://cdn.tailwindcss.com\\\"></script>\\n    <link rel=\\\"stylesheet\\\" href=\\\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\\\">\\n    <!-- Tech Font: Inter -->\\n    <link href=\\\"https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap\\\" rel=\\\"stylesheet\\\">\\n    <style>\\n        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }\\n\\n        /* Background: Subtle High-Tech Mesh */\\n        .bg-tech {\\n            background-color: #f8fafc;\\n            background-image: \\n                radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.03) 0px, transparent 50%),\\n                radial-gradient(at 100% 100%, rgba(37, 99, 235, 0.03) 0px, transparent 50%);\\n        }\\n\\n        /* The Card: Sharp, Clean, Modern */\\n        .pro-card {\\n            background: white;\\n            border: 1px solid #e2e8f0;\\n            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.03), 0 4px 6px -2px rgba(0, 0, 0, 0.02);\\n        }\\n\\n        /* Custom Range Slider: Minimalist */\\n        input[type=range] {\\n            -webkit-appearance: none; background: transparent;\\n        }\\n        input[type=range]::-webkit-slider-thumb {\\n            -webkit-appearance: none; height: 24px; width: 24px;\\n            border-radius: 50%; background: #ffffff;\\n            border: 2px solid #0f172a; /* Slate 900 */\\n            box-shadow: 0 2px 5px rgba(0,0,0,0.1);\\n            margin-top: -10px; cursor: pointer; transition: transform 0.1s;\\n        }\\n        input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }\\n        input[type=range]::-webkit-slider-runnable-track {\\n            width: 100%; height: 4px; background: #e2e8f0; border-radius: 2px;\\n        }\\n\\n        /* Option Cards (Radio/Checkbox) */\\n        .tech-option {\\n            transition: all 0.2s ease;\\n            border: 1px solid #e2e8f0;\\n        }\\n        .tech-option:hover { border-color: #94a3b8; transform: translateY(-1px); }\\n        .tech-option input:checked + div {\\n            border-color: #2563eb; /* Blue 600 */\\n            background-color: #eff6ff; /* Blue 50 */\\n            color: #1e3a8a;\\n        }\\n        .tech-option input:checked + div .icon-box {\\n            background-color: #2563eb; color: white; border-color: #2563eb;\\n        }\\n        .tech-option input:checked + div .check-circle {\\n            opacity: 1; transform: scale(1);\\n        }\\n\\n        /* Animations */\\n        .fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(10px); }\\n        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }\\n        \\n        .counter-anim { transition: all 0.5s ease-out; }\\n    </style>\\n</head>\\n<body class=\\\"bg-tech text-slate-900 min-h-screen flex flex-col items-center py-10 px-4\\\">\\n\\n    <!-- Header: Demo Branding -->\\n    <header class=\\\"w-full max-w-3xl flex justify-between items-end mb-12 border-b border-slate-200 pb-6\\\">\\n        <div>\\n            <div class=\\\"flex items-center gap-2 mb-2\\\">\\n                <!-- Cool Logo Icon: Infinity for \\\"Demo\\\" -->\\n                <i class=\\\"fa-solid fa-infinity text-blue-600 text-xl\\\"></i>\\n                <span class=\\\"font-bold text-xs tracking-widest uppercase text-slate-400\\\">Premium Systems</span>\\n            </div>\\n            <h1 class=\\\"text-3xl font-extrabold tracking-tight text-slate-900\\\">Demo<span class=\\\"text-blue-600\\\">Solar</span></h1>\\n        </div>\\n        <div class=\\\"text-right hidden sm:block\\\">\\n            <div class=\\\"flex items-center justify-end gap-2 text-green-600 font-semibold text-sm h-full pt-6\\\">\\n                <span class=\\\"relative flex h-2 w-2\\\">\\n                  <span class=\\\"animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75\\\"></span>\\n                  <span class=\\\"relative inline-flex rounded-full h-2 w-2 bg-green-500\\\"></span>\\n                </span>\\n                Persönlicher Konfigurator\\n            </div>\\n        </div>\\n    </header>\\n\\n    <!-- Main Application -->\\n    <main class=\\\"w-full max-w-3xl\\\">\\n        \\n        <!-- Minimalist Progress -->\\n        <div class=\\\"flex items-center justify-between mb-8 px-2 relative\\\">\\n            <div class=\\\"absolute top-1/2 left-0 w-full h-[1px] bg-slate-200 -z-10\\\"></div>\\n            \\n            <div id=\\\"step-dot-1\\\" class=\\\"w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold border-4 border-[#f8fafc] z-10 transition-colors\\\">1</div>\\n            <div id=\\\"step-dot-2\\\" class=\\\"w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold border-4 border-[#f8fafc] z-10 transition-colors\\\">2</div>\\n            <div id=\\\"step-dot-3\\\" class=\\\"w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold border-4 border-[#f8fafc] z-10 transition-colors\\\">3</div>\\n        </div>\\n\\n        <form id=\\\"solarForm\\\" class=\\\"pro-card rounded-xl p-8 md:p-12 relative overflow-hidden\\\" onsubmit=\\\"submitForm(event)\\\">\\n            \\n            <!-- STEP 1: CONSUMPTION & ROI -->\\n            <div id=\\\"step-1\\\" class=\\\"step-content fade-in-up\\\">\\n                \\n                <div class=\\\"grid md:grid-cols-2 gap-12 mb-10\\\">\\n                    <!-- Left: Input -->\\n                    <div>\\n                        <h2 class=\\\"text-2xl font-bold mb-6\\\">Energiebedarf</h2>\\n                        \\n                        <div class=\\\"mb-8\\\">\\n                            <label class=\\\"block text-xs font-bold text-slate-400 uppercase tracking-wide mb-3\\\">Stromverbrauch (kWh/Jahr)</label>\\n                            <div class=\\\"flex items-end gap-2 mb-4\\\">\\n                                <span class=\\\"text-4xl font-bold text-slate-900\\\" id=\\\"consumption-val\\\">3500</span>\\n                                <span class=\\\"text-sm text-slate-500 font-medium mb-2\\\">kWh</span>\\n                            </div>\\n                            <input type=\\\"range\\\" id=\\\"consumption\\\" min=\\\"2000\\\" max=\\\"12000\\\" step=\\\"100\\\" value=\\\"3500\\\" class=\\\"w-full accent-slate-900\\\" oninput=\\\"updateCalc()\\\">\\n                        </div>\\n\\n                        <div class=\\\"space-y-3\\\">\\n                            <label class=\\\"tech-option cursor-pointer block group\\\">\\n                                <input type=\\\"checkbox\\\" id=\\\"has-battery\\\" class=\\\"hidden\\\" onchange=\\\"updateCalc()\\\" checked>\\n                                <div class=\\\"p-4 rounded-lg flex items-center gap-4 bg-white border border-slate-200 group-hover:border-slate-300\\\">\\n                                    <div class=\\\"icon-box w-10 h-10 rounded bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 transition-colors\\\">\\n                                        <i class=\\\"fa-solid fa-server\\\"></i>\\n                                    </div>\\n                                    <div>\\n                                        <div class=\\\"font-bold text-sm text-slate-900\\\">High-Perf. Speicher</div>\\n                                        <div class=\\\"text-xs text-slate-500\\\">Maximiert Eigenverbrauch</div>\\n                                    </div>\\n                                    <div class=\\\"check-circle ml-auto w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs opacity-0 transform scale-50 transition-all\\\">\\n                                        <i class=\\\"fa-solid fa-check\\\"></i>\\n                                    </div>\\n                                </div>\\n                            </label>\\n\\n                            <label class=\\\"tech-option cursor-pointer block group\\\">\\n                                <input type=\\\"checkbox\\\" id=\\\"has-ev\\\" class=\\\"hidden\\\" onchange=\\\"updateCalc()\\\">\\n                                <div class=\\\"p-4 rounded-lg flex items-center gap-4 bg-white border border-slate-200 group-hover:border-slate-300\\\">\\n                                    <div class=\\\"icon-box w-10 h-10 rounded bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 transition-colors\\\">\\n                                        <i class=\\\"fa-solid fa-charging-station\\\"></i>\\n                                    </div>\\n                                    <div>\\n                                        <div class=\\\"font-bold text-sm text-slate-900\\\">EV Charger</div>\\n                                        <div class=\\\"text-xs text-slate-500\\\">Intelligente Wallbox</div>\\n                                    </div>\\n                                    <div class=\\\"check-circle ml-auto w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs opacity-0 transform scale-50 transition-all\\\">\\n                                        <i class=\\\"fa-solid fa-check\\\"></i>\\n                                    </div>\\n                                </div>\\n                            </label>\\n                        </div>\\n                    </div>\\n\\n                    <!-- Right: FINANCIAL INTELLIGENCE -->\\n                    <div class=\\\"bg-slate-900 rounded-xl p-8 text-white flex flex-col justify-between relative overflow-hidden shadow-2xl shadow-blue-900/20\\\">\\n                        <!-- Abstract BG graphic -->\\n                        <div class=\\\"absolute top-0 right-0 w-64 h-64 bg-blue-600 rounded-full blur-[80px] opacity-20 -translate-y-1/2 translate-x-1/2\\\"></div>\\n                        \\n                        <div>\\n                            <div class=\\\"text-blue-400 text-xs font-bold uppercase tracking-widest mb-1\\\">Projektion (20 Jahre)</div>\\n                            <h3 class=\\\"text-lg font-medium text-slate-300 mb-6\\\">Geschätzte Ersparnis</h3>\\n                            \\n                            <!-- The Big Number -->\\n                            <div class=\\\"text-5xl lg:text-6xl font-bold tracking-tight mb-2 flex items-baseline gap-1\\\">\\n                                <span id=\\\"savings-val\\\" class=\\\"counter-anim\\\">0</span>\\n                                <span class=\\\"text-2xl text-slate-400\\\">€</span>\\n                            </div>\\n                            <p class=\\\"text-sm text-slate-400\\\">Gegenüber Netzbezug (bei ~40ct/kWh Steigerung)</p>\\n                        </div>\\n\\n                        <div class=\\\"mt-8 pt-6 border-t border-slate-800\\\">\\n                            <div class=\\\"flex justify-between items-center text-sm\\\">\\n                                <span class=\\\"text-slate-400\\\">Amortisation in ca.</span>\\n                                <span class=\\\"font-bold text-white\\\"><span id=\\\"roi-years\\\">7</span> Jahren</span>\\n                            </div>\\n                            <!-- Visual Progress bar for ROI -->\\n                            <div class=\\\"w-full h-1 bg-slate-800 rounded-full mt-3 overflow-hidden\\\">\\n                                <div class=\\\"h-full bg-blue-500 w-1/3\\\"></div>\\n                            </div>\\n                        </div>\\n                    </div>\\n                </div>\\n\\n                <div class=\\\"flex justify-end\\\">\\n                    <button type=\\\"button\\\" onclick=\\\"nextStep(2)\\\" class=\\\"bg-slate-900 text-white px-8 py-4 rounded-lg font-bold text-sm hover:bg-blue-600 transition-colors flex items-center gap-2\\\">\\n                        Konfiguration Starten <i class=\\\"fa-solid fa-arrow-right\\\"></i>\\n                    </button>\\n                </div>\\n            </div>\\n\\n            <!-- STEP 2: ROOF -->\\n            <div id=\\\"step-2\\\" class=\\\"step-content hidden fade-in-up\\\">\\n                <h2 class=\\\"text-2xl font-bold mb-2\\\">Standortdaten</h2>\\n                <p class=\\\"text-slate-500 mb-8 text-sm\\\">Präzise Berechnung der Modulbelegung.</p>\\n\\n                <div class=\\\"grid grid-cols-2 gap-6 mb-8\\\">\\n                    <label class=\\\"tech-option cursor-pointer block\\\">\\n                        <input type=\\\"radio\\\" name=\\\"roofType\\\" value=\\\"mount_tile\\\" class=\\\"hidden\\\" checked onchange=\\\"updateCalc()\\\">\\n                        <div class=\\\"p-6 rounded-lg border border-slate-200 text-center h-full flex flex-col justify-center items-center gap-3\\\">\\n                            <i class=\\\"fa-solid fa-house text-2xl text-slate-400\\\"></i>\\n                            <span class=\\\"font-bold text-slate-700 text-sm\\\">Ziegeldach</span>\\n                        </div>\\n                    </label>\\n                    <label class=\\\"tech-option cursor-pointer block\\\">\\n                        <input type=\\\"radio\\\" name=\\\"roofType\\\" value=\\\"mount_flat\\\" class=\\\"hidden\\\" onchange=\\\"updateCalc()\\\">\\n                        <div class=\\\"p-6 rounded-lg border border-slate-200 text-center h-full flex flex-col justify-center items-center gap-3\\\">\\n                            <i class=\\\"fa-solid fa-layer-group text-2xl text-slate-400\\\"></i>\\n                            <span class=\\\"font-bold text-slate-700 text-sm\\\">Flachdach</span>\\n                        </div>\\n                    </label>\\n                </div>\\n\\n                <div class=\\\"bg-slate-50 p-6 rounded-lg border border-slate-200 mb-8\\\">\\n                    <label class=\\\"block text-xs font-bold text-slate-400 uppercase tracking-wide mb-2\\\">Verfügbare Dachfläche</label>\\n                    <div class=\\\"flex items-center gap-3\\\">\\n                        <input type=\\\"number\\\" id=\\\"roof-area\\\" value=\\\"50\\\" min=\\\"20\\\" max=\\\"1000\\\" class=\\\"bg-transparent text-3xl font-bold text-slate-900 w-32 outline-none border-b-2 border-slate-300 focus:border-blue-600 transition-colors\\\" oninput=\\\"updateCalc()\\\">\\n                        <span class=\\\"text-xl text-slate-400 font-medium\\\">m²</span>\\n                    </div>\\n                    <div class=\\\"mt-4 text-xs text-slate-500 flex items-center gap-2\\\">\\n                        <i class=\\\"fa-solid fa-solar-panel text-blue-500\\\"></i>\\n                        Optimiert für <span id=\\\"calculated-modules\\\" class=\\\"font-bold text-slate-900\\\">--</span> Module\\n                    </div>\\n                </div>\\n\\n                <div class=\\\"flex justify-between items-center\\\">\\n                    <button type=\\\"button\\\" onclick=\\\"nextStep(1)\\\" class=\\\"text-slate-400 hover:text-slate-900 text-sm font-medium px-4\\\">Zurück</button>\\n                    <button type=\\\"button\\\" onclick=\\\"nextStep(3)\\\" class=\\\"bg-slate-900 text-white px-8 py-4 rounded-lg font-bold text-sm hover:bg-blue-600 transition-colors\\\">\\n                        Angebot Berechnen\\n                    </button>\\n                </div>\\n            </div>\\n\\n            <!-- STEP 3: SUMMARY -->\\n            <div id=\\\"step-3\\\" class=\\\"step-content hidden fade-in-up\\\">\\n                \\n                <div class=\\\"text-center mb-8\\\">\\n                    <h2 class=\\\"text-2xl font-bold text-slate-900\\\">Dein Angebot</h2>\\n                    <p class=\\\"text-slate-500 text-sm\\\">Transparente Auflistung aller Komponenten.</p>\\n                </div>\\n\\n                <!-- Technical Bill -->\\n                <div class=\\\"border border-slate-200 rounded-lg overflow-hidden mb-8\\\">\\n                    <div class=\\\"bg-slate-50 px-6 py-3 border-b border-slate-200 flex justify-between items-center text-xs font-bold text-slate-500 uppercase tracking-wider\\\">\\n                        <span>Position</span>\\n                        <span>Preis (Netto)</span>\\n                    </div>\\n                    <div id=\\\"bill-items\\\" class=\\\"divide-y divide-slate-100 bg-white p-2\\\">\\n                        <!-- Items injected by JS -->\\n                    </div>\\n                    <div class=\\\"bg-slate-900 text-white p-6 flex justify-between items-center\\\">\\n                        <div class=\\\"flex flex-col\\\">\\n                            <span class=\\\"text-xs text-slate-400 uppercase tracking-wider\\\">Gesamtpreis</span>\\n                            <span class=\\\"text-[10px] text-green-400\\\">Steuerbefreit (0% USt)</span>\\n                        </div>\\n                        <div class=\\\"text-2xl font-bold\\\" id=\\\"total-price-display\\\">-- €</div>\\n                    </div>\\n                </div>\\n\\n                <!-- Inputs -->\\n                <div class=\\\"grid md:grid-cols-2 gap-4 mb-8\\\">\\n                    <input type=\\\"text\\\" id=\\\"name\\\" placeholder=\\\"Vollständiger Name\\\" required class=\\\"w-full p-4 bg-slate-50 border border-slate-200 rounded-lg focus:border-blue-600 focus:bg-white outline-none transition text-sm font-medium\\\">\\n                    <input type=\\\"email\\\" id=\\\"email\\\" placeholder=\\\"E-Mail Adresse\\\" required class=\\\"w-full p-4 bg-slate-50 border border-slate-200 rounded-lg focus:border-blue-600 focus:bg-white outline-none transition text-sm font-medium\\\">\\n                </div>\\n\\n                <div class=\\\"flex justify-between items-center\\\">\\n                    <button type=\\\"button\\\" onclick=\\\"nextStep(2)\\\" class=\\\"text-slate-400 hover:text-slate-900 text-sm font-medium px-4\\\">Zurück</button>\\n                    <button type=\\\"submit\\\" id=\\\"submit-btn\\\" class=\\\"bg-blue-600 text-white px-8 py-4 rounded-lg font-bold text-sm hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all flex items-center gap-2\\\">\\n                        Jetzt Angebot erhalten <i class=\\\"fa-solid fa-paper-plane\\\"></i>\\n                    </button>\\n                </div>\\n            </div>\\n\\n        </form>\\n\\n        <!-- Success Modal -->\\n        <div id=\\\"success-msg\\\" class=\\\"hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4\\\">\\n            <div class=\\\"bg-white rounded-xl p-8 max-w-sm w-full text-center shadow-2xl fade-in-up\\\">\\n                <div class=\\\"w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl\\\">\\n                    <i class=\\\"fa-solid fa-check\\\"></i>\\n                </div>\\n                <h3 class=\\\"text-xl font-bold text-slate-900 mb-2\\\">Erfolgreich</h3>\\n                <p class=\\\"text-slate-500 text-sm mb-6\\\">Wir haben deine Anfrage erhalten. Dein PDF-Angebot wird jetzt generiert und dir per E-Mail zugestellt.</p>\\n                <button onclick=\\\"location.reload()\\\" class=\\\"text-sm font-bold text-slate-400 hover:text-slate-900\\\">Schließen</button>\\n            </div>\\n        </div>\\n\\n    </main>\\n\\n    <script>\\n        const dbProducts = {{ $json.productJson }} || {};\\n        let currentStep = 1;\\n        let calculatedData = {};\\n\\n        function nextStep(step) {\\n            document.querySelectorAll('.step-content').forEach(el => {\\n                el.classList.add('hidden');\\n                el.classList.remove('fade-in-up'); \\n            });\\n            const target = document.getElementById('step-' + step);\\n            target.classList.remove('hidden');\\n            void target.offsetWidth; // trigger reflow\\n            target.classList.add('fade-in-up');\\n\\n            // Stepper Dots\\n            const dot1 = document.getElementById('step-dot-1');\\n            const dot2 = document.getElementById('step-dot-2');\\n            const dot3 = document.getElementById('step-dot-3');\\n            \\n            // Reset\\n            [dot2, dot3].forEach(d => { d.className = \\\"w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-xs font-bold border-4 border-[#f8fafc] z-10 transition-colors\\\"; });\\n\\n            if(step >= 2) dot2.className = \\\"w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold border-4 border-[#f8fafc] z-10 transition-colors\\\";\\n            if(step >= 3) dot3.className = \\\"w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold border-4 border-[#f8fafc] z-10 transition-colors\\\";\\n\\n            currentStep = step;\\n            updateCalc();\\n        }\\n\\n        function updateCalc() {\\n            // Inputs\\n            const consumption = parseInt(document.getElementById('consumption').value);\\n            const roofArea = parseInt(document.getElementById('roof-area').value) || 0;\\n            const roofType = document.querySelector('input[name=\\\"roofType\\\"]:checked').value;\\n            const hasBattery = document.getElementById('has-battery').checked;\\n            const hasEv = document.getElementById('has-ev').checked;\\n\\n            // Logic: Modules\\n            let numModules = Math.floor(roofArea / 2.0); \\n            if (numModules < 5) numModules = 5; \\n            if (numModules > 100) numModules = 100;\\n\\n            // --- FINANCIAL INTELLIGENCE ---\\n            // Basis: 0.40€ Grid Price, 20 Years.\\n            let sufficiency = 0.30; // 30% Solar only\\n            if(hasBattery) sufficiency += 0.35; // +35% with Battery\\n            if(hasEv) sufficiency += 0.05; // Slightly better utilization\\n\\n            if(sufficiency > 0.8) sufficiency = 0.8;\\n\\n            const annualCostWithoutSolar = consumption * 0.40;\\n            const annualSaving = annualCostWithoutSolar * sufficiency;\\n            const totalSavings20y = Math.round(annualSaving * 20);\\n\\n            // UI\\n            document.getElementById('savings-val').innerText = totalSavings20y.toLocaleString('de-DE');\\n            document.getElementById('roi-years').innerText = hasBattery ? \\\"8-10\\\" : \\\"6-8\\\";\\n            document.getElementById('consumption-val').innerText = consumption;\\n            document.getElementById('calculated-modules').innerText = numModules;\\n\\n            // --- BILL CALC ---\\n            let total = 0;\\n            let billHtml = '';\\n\\n            const addRow = (name, price) => {\\n                billHtml += `\\n                <div class=\\\"flex justify-between items-center py-3 px-4 hover:bg-slate-50 transition-colors\\\">\\n                    <span class=\\\"text-sm font-medium text-slate-700\\\">${name}</span>\\n                    <span class=\\\"font-mono text-sm text-slate-900\\\">${price.toLocaleString('de-DE')} €</span>\\n                </div>`;\\n            };\\n\\n            // Hardware\\n            const pPrice = dbProducts['panel_black']?.price || 200;\\n            const modTotal = numModules * pPrice;\\n            total += modTotal;\\n            addRow(`${numModules}x Demo Panels Full Black`, modTotal);\\n\\n            const invPrice = dbProducts['inverter_base']?.price || 1500;\\n            total += invPrice;\\n            addRow('Wechselrichter 10kW', invPrice);\\n\\n            const mPrice = dbProducts[roofType]?.price || 120;\\n            const mTotal = numModules * mPrice;\\n            total += mTotal;\\n            addRow('Montagesystem & UK', mTotal);\\n\\n            if(hasBattery) {\\n                const bPrice = dbProducts['battery_unit']?.price || 2500;\\n                total += bPrice;\\n                addRow('Speichersystem 5kWh', bPrice);\\n            }\\n\\n            if(hasEv) {\\n                const wPrice = dbProducts['wallbox_standard']?.price || 800;\\n                total += wPrice;\\n                addRow('Smart Wallbox 11kW', wPrice);\\n            }\\n\\n            document.getElementById('bill-items').innerHTML = billHtml;\\n            document.getElementById('total-price-display').innerText = total.toLocaleString('de-DE') + \\\" €\\\";\\n\\n            calculatedData = { consumption, roofArea, numModules, roofType, hasBattery, hasEv, totalSavings20y, totalPrice: total, billHtml };\\n        }\\n\\n        async function submitForm(e) {\\n            e.preventDefault();\\n            const btn = document.getElementById('submit-btn');\\n            const original = btn.innerHTML;\\n            btn.innerHTML = '<i class=\\\"fa-solid fa-circle-notch fa-spin\\\"></i> Verarbeitung...';\\n            btn.disabled = true;\\n\\n            const formData = {\\n                customer: { name: document.getElementById('name').value, email: document.getElementById('email').value },\\n                config: calculatedData,\\n                date: new Date().toISOString()\\n            };\\n\\n            // WEBHOOK URL\\n            const webhookUrl = 'http://localhost:5678/webhook/solar-angebot-abschluss'; \\n\\n            try {\\n                await fetch(webhookUrl, {\\n                    method: 'POST',\\n                    headers: {'Content-Type': 'application/json'},\\n                    body: JSON.stringify(formData)\\n                });\\n                \\n                setTimeout(() => {\\n                    document.getElementById('success-msg').classList.remove('hidden');\\n                    document.getElementById('success-msg').classList.add('flex');\\n                }, 1000);\\n            } catch (err) {\\n                alert(\\\"Fehler beim Senden der Daten.\\\"); \\n                btn.innerHTML = original; \\n                btn.disabled = false;\\n            }\\n        }\\n\\n        updateCalc();\\n    </script>\\n</body>\\n</html>\",\n              \"type\": \"string\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.set\",\n      \"typeVersion\": 3.4,\n      \"position\": [\n        624,\n        0\n      ],\n      \"id\": \"aca58425-28b1-4950-b51f-202b3bf3eec2\",\n      \"name\": \"Edit Fields\"\n    },\n    {\n      \"parameters\": {\n        \"respondWith\": \"text\",\n        \"responseBody\": \"={{ $json.myHTML }}\",\n        \"options\": {\n          \"responseHeaders\": {\n            \"entries\": [\n              {\n                \"name\": \"Content-Type\",\n                \"value\": \"text/html\"\n              }\n            ]\n          }\n        }\n      },\n      \"type\": \"n8n-nodes-base.respondToWebhook\",\n      \"typeVersion\": 1.5,\n      \"position\": [\n        832,\n        0\n      ],\n      \"id\": \"d8c12576-86bd-48b8-b77a-07e656885f96\",\n      \"name\": \"Respond to Webhook\"\n    },\n    {\n      \"parameters\": {\n        \"httpMethod\": \"POST\",\n        \"path\": \"solar-angebot-submission\",\n        \"responseMode\": \"responseNode\",\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.webhook\",\n      \"typeVersion\": 2.1,\n      \"position\": [\n        -16,\n        304\n      ],\n      \"id\": \"9d47709d-7aa8-46a3-bffb-4eb1853fb838\",\n      \"name\": \"Webhook1\",\n      \"webhookId\": \"00000000-0000-0000-0000-000000000000\"\n    },\n    {\n      \"parameters\": {\n        \"respondWith\": \"json\",\n        \"responseBody\": \"{\\n  \\\"status\\\": \\\"success\\\", \\\"message\\\": \\\"Daten empfangen\\\"\\n}\",\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.respondToWebhook\",\n      \"typeVersion\": 1.5,\n      \"position\": [\n        240,\n        304\n      ],\n      \"id\": \"ab3d6d4f-556d-4a87-8cb9-abea5e76cc55\",\n      \"name\": \"Respond to Webhook1\"\n    },\n    {\n      \"parameters\": {\n        \"promptType\": \"define\",\n        \"text\": \"=Schreibe eine kurze Einleitung für das Angebot an {{ $('Webhook1').item.json.body.customer.name }}.\\n\\nDaten:\\n- Verbrauch: {{ $('Webhook1').item.json.body.config.consumption }} kWh\\n- Ersparnis (20J): {{ $('Webhook1').item.json.body.config.totalSavings20y }} €\\n- Speicher dabei: {{ $('Webhook1').item.json.body.config.hasBattery ? \\\"Ja\\\" : \\\"Nein\\\" }}\\n\\nErwähne die Ersparnis positiv. Halte es kurz (max 3 Sätze). Keine Anrede am Anfang (die steht schon im Layout), nur der Text. Nutze \\\"Du\\\".\",\n        \"batching\": {}\n      },\n      \"type\": \"@n8n/n8n-nodes-langchain.chainLlm\",\n      \"typeVersion\": 1.7,\n      \"position\": [\n        656,\n        304\n      ],\n      \"id\": \"344a3e4f-0f9b-4b2a-9b4c-c2ec56da9764\",\n      \"name\": \"Basic LLM Chain\"\n    },\n    {\n      \"parameters\": {\n        \"model\": \"anthropic/claude-sonnet-4.5\",\n        \"options\": {}\n      },\n      \"type\": \"@n8n/n8n-nodes-langchain.lmChatOpenRouter\",\n      \"typeVersion\": 1,\n      \"position\": [\n        592,\n        512\n      ],\n      \"id\": \"ddcc6371-4236-41d1-8a13-4360c5b68487\",\n      \"name\": \"OpenRouter Chat Model\",\n      \"credentials\": {\n        \"openRouterApi\": {\n          \"id\": \"YOUR_CREDENTIAL_ID\",\n          \"name\": \"open Router API\"\n        }\n      }\n    },\n    {\n      \"parameters\": {\n        \"jsCode\": \"// --- 1. DATEN VORBEREITEN ---\\n\\n// Die Config vom Kunden (Frontend) - Node heißt \\\"Webhook1\\\"\\nconst input = $('Webhook1').first().json.body.config;\\nconst customer = $('Webhook1').first().json.body.customer;\\n\\n// Die echten Preise aus der Datenbank \\n// WICHTIG: Hier rufen wir jetzt DEINEN Node-Namen \\\"Artikel laden1\\\" auf\\nconst dbItems = $('Artikel laden1').all();\\n\\nconst products = {};\\ndbItems.forEach(item => {\\n    // Wir nutzen hier products[code] für schnellen Zugriff\\n    products[item.json.product_code] = item.json;\\n});\\n\\n// Hilfsfunktion: Preis holen oder 0 (Sicherheit)\\nconst getProduct = (code) => products[code] || { price: 0, name: 'Unbekannt' };\\n\\n// --- 2. SERVERSEITIGE KALKULATION (Sicherheit!) ---\\nlet totalPrice = 0;\\nconst lineItems = [];\\n\\n// Module\\nconst modProduct = getProduct('panel_black');\\nconst modTotal = input.numModules * modProduct.price;\\ntotalPrice += modTotal;\\nlineItems.push({\\n    name: `${input.numModules}x ${modProduct.name}`,\\n    desc: '440 Wp Nennleistung, 25 Jahre Garantie',\\n    price: modTotal\\n});\\n\\n// Wechselrichter (Pauschal 1x)\\nconst invProduct = getProduct('inverter_base');\\ntotalPrice += invProduct.price;\\nlineItems.push({\\n    name: invProduct.name,\\n    desc: 'Smart Grid Ready, 3-Phasig',\\n    price: invProduct.price\\n});\\n\\n// Montage\\nconst mountProduct = getProduct(input.roofType); // 'mount_tile' oder 'mount_flat'\\nconst mountTotal = input.numModules * mountProduct.price;\\ntotalPrice += mountTotal;\\nlineItems.push({\\n    name: 'Montagesystem & Installation',\\n    desc: input.roofType === 'mount_tile' ? 'Ziegeldach Unterkonstruktion' : 'Flachdach Aufständerung',\\n    price: mountTotal\\n});\\n\\n// Optional: Speicher\\nif (input.hasBattery) {\\n    const batProduct = getProduct('battery_unit');\\n    totalPrice += batProduct.price;\\n    lineItems.push({\\n        name: batProduct.name,\\n        desc: 'Lithium-Eisenphosphat (LiFePO4)',\\n        price: batProduct.price\\n    });\\n}\\n\\n// Optional: Wallbox\\nif (input.hasEv) {\\n    const wbProduct = getProduct('wallbox_standard');\\n    totalPrice += wbProduct.price;\\n    lineItems.push({\\n        name: wbProduct.name,\\n        desc: '11kW Ladeleistung inkl. Kabel',\\n        price: wbProduct.price\\n    });\\n}\\n\\n// AI Text holen (Fallback)\\n// WICHTIG: Angepasst an deinen Node-Namen \\\"Basic LLM Chain\\\"\\nlet aiText = \\\"Vielen Dank für deine Konfiguration. Anbei erhältst du dein detailliertes Festpreis-Angebot.\\\";\\ntry {\\n    if ($('LLM').first()) {\\n        // AI Nodes geben den Text oft in .text oder .content oder .output zurück, je nach Node Typ\\n        const aiJson = $('LLM').first().json;\\n        aiText = aiJson.text || aiJson.content || aiJson.output || aiText;\\n    }\\n} catch (e) {}\\n\\n\\n// --- 3. HTML GENERIEREN ---\\nconst formatMoney = (amount) => parseFloat(amount).toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });\\n\\n// Wir generieren die Tabellenzeilen dynamisch\\nconst rowsHtml = lineItems.map(item => `\\n    <tr>\\n        <td>\\n            <span class=\\\"pos-name\\\">${item.name}</span>\\n            <span class=\\\"pos-desc\\\">${item.desc}</span>\\n        </td>\\n        <td class=\\\"price\\\">${formatMoney(item.price)} €</td>\\n    </tr>\\n`).join('');\\n\\nconst html = `\\n<!DOCTYPE html>\\n<html>\\n<head>\\n    <link href=\\\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap\\\" rel=\\\"stylesheet\\\">\\n    <style>\\n        body { font-family: 'Inter', sans-serif; color: #1e293b; padding: 40px; font-size: 14px; }\\n        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; margin-bottom: 40px; }\\n        .logo { font-size: 24px; font-weight: 800; color: #0f172a; }\\n        .logo span { color: #2563eb; }\\n        .meta { text-align: right; font-size: 11px; color: #64748b; line-height: 1.5; }\\n        h1 { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 15px; }\\n        .intro { font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 40px; max-width: 650px; }\\n        \\n        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }\\n        th { text-align: left; font-size: 10px; text-transform: uppercase; color: #94a3b8; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; font-weight: 700; }\\n        td { padding: 15px 0; border-bottom: 1px solid #f1f5f9; vertical-align: top; }\\n        .pos-name { font-weight: 600; color: #0f172a; display: block; }\\n        .pos-desc { font-size: 12px; color: #64748b; }\\n        .price { text-align: right; font-weight: 500; color: #334155; }\\n        \\n        .total-row td { border-top: 2px solid #0f172a; border-bottom: none; padding-top: 20px; font-size: 18px; font-weight: 700; color: #0f172a; }\\n        .footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 10px; color: #cbd5e1; }\\n    </style>\\n</head>\\n<body>\\n    <div class=\\\"header\\\">\\n        <div class=\\\"logo\\\">Demo<span>Solar</span></div>\\n        <div class=\\\"meta\\\">\\n            Angebots-Nr: #${Math.floor(Math.random() * 90000) + 10000}<br>\\n            Datum: ${new Date().toLocaleDateString('de-DE')}<br>\\n            Kunde: ${customer.name}\\n        </div>\\n    </div>\\n\\n    <h1>Dein Festpreis-Angebot</h1>\\n    <div class=\\\"intro\\\">${aiText}</div>\\n\\n    <table>\\n        <thead>\\n            <tr><th width=\\\"70%\\\">Position</th><th width=\\\"30%\\\" style=\\\"text-align: right;\\\">Preis</th></tr>\\n        </thead>\\n        <tbody>\\n            ${rowsHtml}\\n            \\n            <tr class=\\\"total-row\\\">\\n                <td>Gesamtinvestition (Netto)</td>\\n                <td style=\\\"text-align: right;\\\">${formatMoney(totalPrice)} €</td>\\n            </tr>\\n        </tbody>\\n    </table>\\n    \\n    <div style=\\\"text-align: right; font-size: 11px; color: #16a34a; font-weight: 500;\\\">\\n        Steuerbefreit gemäß § 12 Abs. 3 UStG (0% MwSt)\\n    </div>\\n\\n    <div class=\\\"footer\\\">\\n        Demo Solar GmbH • Berlin • Sicherheits-Check: Preise Datenbank-verifiziert.\\n    </div>\\n</body>\\n</html>\\n`;\\n\\nreturn { json: { html } };\"\n      },\n      \"type\": \"n8n-nodes-base.code\",\n      \"typeVersion\": 2,\n      \"position\": [\n        1008,\n        304\n      ],\n      \"id\": \"4c8a795e-830c-4c8a-95eb-7d7c8f10121a\",\n      \"name\": \"Code in JavaScript1\"\n    },\n    {\n      \"parameters\": {\n        \"operation\": \"get\",\n        \"dataTableId\": {\n          \"__rl\": true,\n          \"value\": \"YOUR_DATA_TABLE_ID\",\n          \"mode\": \"list\",\n          \"cachedResultName\": \"products_solar\",\n          \"cachedResultUrl\": \"/projects/YOUR_PROJECT_ID/datatables/YOUR_DATA_TABLE_ID\"\n        },\n        \"returnAll\": true\n      },\n      \"type\": \"n8n-nodes-base.dataTable\",\n      \"typeVersion\": 1,\n      \"position\": [\n        448,\n        304\n      ],\n      \"id\": \"d278e7b1-cc6e-412d-8ada-51ddaf56bd29\",\n      \"name\": \"Artikel laden1\"\n    },\n    {\n      \"parameters\": {\n        \"url\": \"https://api.pdfshift.io/v3/convert/pdf\",\n        \"authentication\": \"genericCredentialType\",\n        \"genericAuthType\": \"httpHeaderAuth\",\n        \"sendBody\": true,\n        \"bodyParameters\": {\n          \"parameters\": [\n            {\n              \"name\": \"source\",\n              \"value\": \"={{ $json.html }}\"\n            },\n            {\n              \"name\": \"sandbox\",\n              \"value\": \"true\"\n            }\n          ]\n        },\n        \"options\": {\n          \"response\": {\n            \"response\": {\n              \"responseFormat\": \"file\"\n            }\n          }\n        }\n      },\n      \"type\": \"n8n-nodes-base.httpRequest\",\n      \"typeVersion\": 4.3,\n      \"position\": [\n        1232,\n        304\n      ],\n      \"id\": \"ee74cec8-6e8f-4080-8be0-ae8c1906cf9c\",\n      \"name\": \"HTTP Request\",\n      \"credentials\": {\n        \"httpHeaderAuth\": {\n          \"id\": \"YOUR_CREDENTIAL_ID\",\n          \"name\": \"http Header Auth\"\n        }\n      }\n    },\n    {\n      \"parameters\": {\n        \"sendTo\": \"={{ $('Webhook1').first().json.body.customer.email }}\",\n        \"subject\": \"Dein Angebot von Demo Solar\",\n        \"message\": \"=<div style=\\\"font-family: sans-serif; color: #333; line-height: 1.6;\\\">\\n    <h2 style=\\\"color: #0f172a;\\\">Dein Weg zur Energie-Unabhängigkeit ☀️</h2>\\n    \\n    <p>Hallo {{ $('Webhook1').first().json.body.customer.name }},</p>\\n    \\n    <p>vielen Dank für deine Konfiguration bei <strong>Demo Solar</strong>. Wir haben deine Daten analysiert und sind begeistert: Dein Dach hat echtes Potenzial!</p>\\n    \\n    <p><strong>Anbei findest du dein persönliches Angebot als PDF.</strong></p>\\n    \\n    <p style=\\\"background-color: #f0f9ff; padding: 15px; border-left: 4px solid #2563eb; border-radius: 4px;\\\">\\n        🚀 <strong>Nächster Schritt:</strong><br>\\n        Das Angebot passt? Oder du hast noch Fragen zur Technik?<br><br>\\n        👉 <strong>Antworte einfach kurz auf diese E-Mail</strong> (z.B. \\\"Bitte um Rückruf\\\") und einer unserer Experten meldet sich bei dir, um die Details zu finalisieren.\\n    </p>\\n    \\n    <p>Lass uns gemeinsam die Energiewende rocken.</p>\\n    \\n    <p>Beste Grüße,<br>\\n    Dein Team von Demo Solar</p>\\n    \\n    <hr style=\\\"border: 0; border-top: 1px solid #eee; margin: 30px 0;\\\">\\n    <small style=\\\"color: #999;\\\">Demo Solar GmbH | Berlin</small>\\n</div>\",\n        \"options\": {\n          \"attachmentsUi\": {\n            \"attachmentsBinary\": [\n              {}\n            ]\n          }\n        }\n      },\n      \"type\": \"n8n-nodes-base.gmail\",\n      \"typeVersion\": 2.2,\n      \"position\": [\n        1632,\n        256\n      ],\n      \"id\": \"0ace78b2-d868-47f4-b2df-268fae7e7a2e\",\n      \"name\": \"Send a message\",\n      \"webhookId\": \"00000000-0000-0000-0000-000000000000\",\n      \"credentials\": {\n        \"gmailOAuth2\": {\n          \"id\": \"YOUR_CREDENTIAL_ID\",\n          \"name\": \"gmail OAuth2\"\n        }\n      }\n    },\n    {\n      \"parameters\": {\n        \"name\": \"={{\\\"Angebot-\\\" + new Date().toISOString() + \\\".pdf\\\"}}\",\n        \"driveId\": {\n          \"__rl\": true,\n          \"mode\": \"list\",\n          \"value\": \"My Drive\"\n        },\n        \"folderId\": {\n          \"__rl\": true,\n          \"value\": \"YOUR_GOOGLE_DRIVE_FOLDER_ID\",\n          \"mode\": \"id\"\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.googleDrive\",\n      \"typeVersion\": 3,\n      \"position\": [\n        1632,\n        480\n      ],\n      \"id\": \"ca5a318e-6a17-437a-bab6-a9d61b58fb4c\",\n      \"name\": \"Upload file\",\n      \"credentials\": {\n        \"googleDriveOAuth2Api\": {\n          \"id\": \"YOUR_CREDENTIAL_ID\",\n          \"name\": \"google Drive OAuth2 API\"\n        }\n      }\n    }\n  ],\n  \"pinData\": {},\n  \"connections\": {\n    \"Webhook\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Get row(s)\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Get row(s)\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Code in JavaScript\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Code in JavaScript\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Edit Fields\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Edit Fields\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Respond to Webhook\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Webhook1\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Respond to Webhook1\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Respond to Webhook1\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Artikel laden1\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"OpenRouter Chat Model\": {\n      \"ai_languageModel\": [\n        [\n          {\n            \"node\": \"Basic LLM Chain\",\n            \"type\": \"ai_languageModel\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Basic LLM Chain\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Code in JavaScript1\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Artikel laden1\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Basic LLM Chain\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Code in JavaScript1\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"HTTP Request\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"HTTP Request\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Upload file\",\n            \"type\": \"main\",\n            \"index\": 0\n          },\n          {\n            \"node\": \"Send a message\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Upload file\": {\n      \"main\": [\n        []\n      ]\n    }\n  },\n  \"active\": false,\n  \"settings\": {\n    \"executionOrder\": \"v1\",\n    \"callerPolicy\": \"workflowsFromSameOwner\",\n    \"availableInMCP\": false\n  },\n  \"versionId\": \"b6b8542e-455c-4353-b525-de08f1cc2301\",\n  \"meta\": {\n    \"templateCredsSetupCompleted\": true\n  },\n  \"tags\": []\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        624,
+        0
+      ],
+      "id": "09c15f7a-775b-4023-841d-a47aa2713774",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"status\": \"success\", \"message\": \"Daten empfangen\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        208,
+        416
+      ],
+      "id": "c19b9d1b-529c-49cf-8945-d36782739f27",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "PNshQ7kcg93oCdri",
+          "mode": "list",
+          "cachedResultName": "Demo_Solarenergie",
+          "cachedResultUrl": "/projects/ssNXjQT3r3sLWcHo/datatables/PNshQ7kcg93oCdri"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        416
+      ],
+      "id": "a5e66c4c-4ab5-4342-b593-9e734de2fc37",
+      "name": "Artikel überprüfen"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "PNshQ7kcg93oCdri",
+          "mode": "list",
+          "cachedResultName": "Demo_Solarenergie",
+          "cachedResultUrl": "/projects/ssNXjQT3r3sLWcHo/datatables/PNshQ7kcg93oCdri"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "ff7811a5-a55c-41dd-8161-12ed464675a1",
+      "name": "Artikel"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Schreibe eine kurze Einleitung für das Angebot an {{ $('Webhook1').item.json.body.customer.name }}.  Daten: - Verbrauch: {{ $('Webhook1').item.json.body.config.consumption }} kWh - Ersparnis (20J): {{ $('Webhook1').item.json.body.config.totalSavings20y }} € - Speicher dabei: {{ $('Webhook1').item.json.body.config.hasBattery ? \"Ja\" : \"Nein\" }}  Erwähne die Ersparnis positiv. Halte es kurz (max 3 Sätze). Keine Anrede am Anfang (die steht schon im Layout), nur der Text. Nutze \"Du\".",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "="
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        624,
+        416
+      ],
+      "id": "5b967118-dc35-43e4-a21b-6b243f53a92f",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        624
+      ],
+      "id": "47547c95-21ce-44e1-a856-5d8d840efa5b",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "PLACEHOLDER",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- 1. DATEN VORBEREITEN ---\n\n// Die Config vom Kunden (Frontend) - Node heißt \"Webhook1\"\nconst input = $('Webhook1').first().json.body.config;\nconst customer = $('Webhook1').first().json.body.customer;\n\n// Die echten Preise aus der Datenbank \n// WICHTIG: Hier rufen wir jetzt DEINEN Node-Namen \"Artikel laden1\" auf\nconst dbItems = $('Artikel laden1').all();\n\nconst products = {};\ndbItems.forEach(item => {\n    // Wir nutzen hier products[code] für schnellen Zugriff\n    products[item.json.product_code] = item.json;\n});\n\n// Hilfsfunktion: Preis holen oder 0 (Sicherheit)\nconst getProduct = (code) => products[code] || { price: 0, name: 'Unbekannt' };\n\n// --- 2. SERVERSEITIGE KALKULATION (Sicherheit!) ---\nlet totalPrice = 0;\nconst lineItems = [];\n\n// Module\nconst modProduct = getProduct('panel_black');\nconst modTotal = input.numModules * modProduct.price;\ntotalPrice += modTotal;\nlineItems.push({\n    name: `${input.numModules}x ${modProduct.name}`,\n    desc: '440 Wp Nennleistung, 25 Jahre Garantie',\n    price: modTotal\n});\n\n// Wechselrichter (Pauschal 1x)\nconst invProduct = getProduct('inverter_base');\ntotalPrice += invProduct.price;\nlineItems.push({\n    name: invProduct.name,\n    desc: 'Smart Grid Ready, 3-Phasig',\n    price: invProduct.price\n});\n\n// Montage\nconst mountProduct = getProduct(input.roofType); // 'mount_tile' oder 'mount_flat'\nconst mountTotal = input.numModules * mountProduct.price;\ntotalPrice += mountTotal;\nlineItems.push({\n    name: 'Montagesystem & Installation',\n    desc: input.roofType === 'mount_tile' ? 'Ziegeldach Unterkonstruktion' : 'Flachdach Aufständerung',\n    price: mountTotal\n});\n\n// Optional: Speicher\nif (input.hasBattery) {\n    const batProduct = getProduct('battery_unit');\n    totalPrice += batProduct.price;\n    lineItems.push({\n        name: batProduct.name,\n        desc: 'Lithium-Eisenphosphat (LiFePO4)',\n        price: batProduct.price\n    });\n}\n\n// Optional: Wallbox\nif (input.hasEv) {\n    const wbProduct = getProduct('wallbox_standard');\n    totalPrice += wbProduct.price;\n    lineItems.push({\n        name: wbProduct.name,\n        desc: '11kW Ladeleistung inkl. Kabel',\n        price: wbProduct.price\n    });\n}\n\n// AI Text holen (Fallback)\n// WICHTIG: Angepasst an deinen Node-Namen \"Basic LLM Chain\"\nlet aiText = \"Vielen Dank für deine Konfiguration. Anbei erhältst du dein detailliertes Festpreis-Angebot.\";\ntry {\n    if ($('LLM').first()) {\n        // AI Nodes geben den Text oft in .text oder .content oder .output zurück, je nach Node Typ\n        const aiJson = $('LLM').first().json;\n        aiText = aiJson.text || aiJson.content || aiJson.output || aiText;\n    }\n} catch (e) {}\n\n\n// --- 3. HTML GENERIEREN ---\nconst formatMoney = (amount) => parseFloat(amount).toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 });\n\n// Wir generieren die Tabellenzeilen dynamisch\nconst rowsHtml = lineItems.map(item => `\n    <tr>\n        <td>\n            <span class=\"pos-name\">${item.name}</span>\n            <span class=\"pos-desc\">${item.desc}</span>\n        </td>\n        <td class=\"price\">${formatMoney(item.price)} €</td>\n    </tr>\n`).join('');\n\nconst html = `\n<!DOCTYPE html>\n<html>\n<head>\n    <link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap\" rel=\"stylesheet\">\n    <style>\n        body { font-family: 'Inter', sans-serif; color: #1e293b; padding: 40px; font-size: 14px; }\n        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; margin-bottom: 40px; }\n        .logo { font-size: 24px; font-weight: 800; color: #0f172a; }\n        .logo span { color: #2563eb; }\n        .meta { text-align: right; font-size: 11px; color: #64748b; line-height: 1.5; }\n        h1 { font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 15px; }\n        .intro { font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 40px; max-width: 650px; }\n        \n        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }\n        th { text-align: left; font-size: 10px; text-transform: uppercase; color: #94a3b8; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; font-weight: 700; }\n        td { padding: 15px 0; border-bottom: 1px solid #f1f5f9; vertical-align: top; }\n        .pos-name { font-weight: 600; color: #0f172a; display: block; }\n        .pos-desc { font-size: 12px; color: #64748b; }\n        .price { text-align: right; font-weight: 500; color: #334155; }\n        \n        .total-row td { border-top: 2px solid #0f172a; border-bottom: none; padding-top: 20px; font-size: 18px; font-weight: 700; color: #0f172a; }\n        .footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 10px; color: #cbd5e1; }\n    </style>\n</head>\n<body>\n    <div class=\"header\">\n        <div class=\"logo\">Everlast<span>Solar</span></div>\n        <div class=\"meta\">\n            Angebots-Nr: #${Math.floor(Math.random() * 90000) + 10000}<br>\n            Datum: ${new Date().toLocaleDateString('de-DE')}<br>\n            Kunde: ${customer.name}\n        </div>\n    </div>\n\n    <h1>Dein Festpreis-Angebot</h1>\n    <div class=\"intro\">${aiText}</div>\n\n    <table>\n        <thead>\n            <tr><th width=\"70%\">Position</th><th width=\"30%\" style=\"text-align: right;\">Preis</th></tr>\n        </thead>\n        <tbody>\n            ${rowsHtml}\n            \n            <tr class=\"total-row\">\n                <td>Gesamtinvestition (Netto)</td>\n                <td style=\"text-align: right;\">${formatMoney(totalPrice)} €</td>\n            </tr>\n        </tbody>\n    </table>\n    \n    <div style=\"text-align: right; font-size: 11px; color: #16a34a; font-weight: 500;\">\n        Steuerbefreit gemäß § 12 Abs. 3 UStG (0% MwSt)\n    </div>\n\n    <div class=\"footer\">\n        Everlast Solar GmbH • Berlin • Sicherheits-Check: Preise Datenbank-verifiziert.\n    </div>\n</body>\n</html>\n`;\n\nreturn { json: { html } };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        976,
+        416
+      ],
+      "id": "22125925-c2e0-4064-a5f9-3623d8c6fdbc",
+      "name": "Preisrefenrenzierung"
+    },
+    {
+      "parameters": {
+        "url": "https://api.pdfshift.io/v3/convert/pdf",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "source",
+              "value": "{{ $json.html }}"
+            },
+            {
+              "name": "sandbox",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1184,
+        416
+      ],
+      "id": "dd5b5135-a78c-49a4-9503-65301869fa4b",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "PLACEHOLDER",
+          "name": "PDFShift"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook1').first().json.body.customer.email }}",
+        "subject": "Dein Angebot von Demo",
+        "message": "=<div style=\"font-family: sans-serif; color: #333; line-height: 1.6;\">\n    <h2 style=\"color: #0f172a;\">Dein Weg zur Energie-Unabhängigkeit ☀️</h2>\n    \n    <p>Hallo {{ $('Webhook1').first().json.body.customer.name }},</p>\n    \n    <p>vielen Dank für deine Konfiguration bei <strong>Demo Solar</strong>. Wir haben deine Daten analysiert und sind begeistert: Dein Dach hat echtes Potenzial!</p>\n    \n    <p><strong>Anbei findest du dein persönliches Angebot als PDF.</strong></p>\n    \n    <p style=\"background-color: #f0f9ff; padding: 15px; border-left: 4px solid #2563eb; border-radius: 4px;\">\n        🚀 <strong>Nächster Schritt:</strong><br>\n        Das Angebot passt? Oder du hast noch Fragen zur Technik?<br><br>\n        👉 <strong>Antworte einfach kurz auf diese E-Mail</strong> (z.B. \"Bitte um Rückruf\") und einer unserer Experten meldet sich bei dir, um die Details zu finalisieren.\n    </p>\n    \n    <p>Lass uns gemeinsam die Energiewende rocken.</p>\n    \n    <p>Beste Grüße,<br>\n    Dein Team von Demo Solar</p>\n    \n    <hr style=\"border: 0; border-top: 1px solid #eee; margin: 30px 0;\">\n    <small style=\"color: #999;\">Demo Solar GmbH | Berlin</small>\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1600,
+        416
+      ],
+      "id": "d598030c-17fa-4f03-bb7c-f34b1810ec66",
+      "name": "Send a message",
+      "webhookId": "",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "PLACEHOLDER",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "=File Name {{ \"Angebot-\" + new Date().toISOString() + \".pdf\" }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1616,
+        608
+      ],
+      "id": "d5f30d9d-2400-4703-9d20-f9c336603c6a",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "PLACEHOLDER",
+          "name": "Google Drive account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Artikel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Artikel überprüfen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Artikel": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Artikel überprüfen": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Preisrefenrenzierung",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preisrefenrenzierung": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "PLACEHOLDER",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "PLACEHOLDER"
+  },
+  "id": "wcSLjAIj8wGGZKCq-LWpN",
+  "tags": []
+}
